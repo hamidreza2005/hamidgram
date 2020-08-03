@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Gregwar\Image\Image;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,5 +15,11 @@ use Gregwar\Image\Image;
 */
 
 Route::get('/', function (Request $request) {
-    return ['yes'];
+    return asset('storage/2020/default.png');
 });
+
+Route::post('/login','AuthController@login')->name('login');
+Route::post('/register','AuthController@register')->name('register');
+
+Route::get('/confirmation/emailConfirmation/{code}','AuthController@emailConfirm')->middleware('guest:api')->name('emailConfirmation');
+

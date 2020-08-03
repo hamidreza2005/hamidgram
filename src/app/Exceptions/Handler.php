@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Laravel\Passport\Exceptions\OAuthServerException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -26,6 +29,8 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+    protected $message;
+    protected $code;
     /**
      * Report or log an exception.
      *
@@ -50,6 +55,54 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        return parent::render($request, $exception);
+        if ($request->wantsJson()){
+//            dd($exception);
+            $exception = $this->prepareException($exception);
+//            dd($exception);
+            $this->setCode($exception);
+            $this->setMessage($exception);
+            return response(['error'=>$this->message],$this->code);
+        }
+        return parent::render($request,$exception);
+    }
+
+    private function setCode(Throwable $exception){
+        switch ($exception){
+            case method_exists($exception,'getStatusCode'):
+                $this->code = $exception->getStatusCode();
+                break;
+            case property_exists($exception,'status'):
+                $this->code = $exception->status;
+                break;
+            case ($exception instanceof AuthenticationException):
+            case ($exception instanceof OAuthServerException ):
+                $this->code = 401;
+                break;
+            default:
+                $this->code = 500;
+        }
+    }
+
+    private function setMessage(Throwable $exception)
+    {
+        switch ($exception){
+            case ($exception instanceof ValidationException):
+                $this->message = $exception->errors();
+                break;
+            case $this->code==500:
+                $this->message = "Server Internal Error";
+                break;
+            case ($exception instanceof NotFoundHttpException):
+//                $ex = $exception->getPrevious();
+                $this->message = "Invalid Data";
+                break;
+            case ($exception instanceof AuthenticationException):
+                $this->message = "Access Denied";
+                break;
+//            case ($exception instanceof OAuthServerException ):
+//                $this->message
+            default:
+                $this->message = $exception->getMessage();
+        }
     }
 }
