@@ -18,9 +18,9 @@ Route::get('/', function (Request $request) {
 //    \Illuminate\Support\Facades\Cache::put('user',\App\User::find(1));
     return new \App\Mail\VerificationEmail(\App\User::find(1));
 });
-
-Route::post('/login','AuthController@login')->name('login');
-Route::post('/register','AuthController@register')->name('register');
-
-Route::get('/confirmation/emailConfirmation/{code}','AuthController@emailConfirm')->middleware('guest:api')->name('emailConfirmation');
+Route::group(['namespace'=>'v1'],function (){
+    Route::post('/login','AuthController@login')->name('login');
+    Route::post('/register','AuthController@register')->name('register');
+    Route::get('/confirmation/emailConfirmation/{code}','AuthController@emailConfirm')->middleware('guest:api')->name('emailConfirmation');
+});
 
