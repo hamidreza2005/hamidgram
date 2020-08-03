@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function (Request $request) {
-    return asset('storage/2020/default.png');
+//    \Illuminate\Support\Facades\Cache::put('user',\App\User::find(1));
+    return new \App\Mail\VerificationEmail(\App\User::find(1));
 });
 
 Route::post('/login','AuthController@login')->name('login');

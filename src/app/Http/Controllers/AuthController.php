@@ -50,10 +50,9 @@ class AuthController extends Controller
         if ($validation->fails()){
             return \response(['error'=>$validation->errors()],401);
         }
-        $credentials['email_verification_code'] = sha1(Str::random(50));
+        $credentials['email_verification_code'] = Str::random(50);
         $credentials['password'] = bcrypt($credentials['password']);
         unset($credentials['password_confirmation']);
-//        dd($credentials);
         $user = User::create($credentials);
         SendVerificationEmailJob::dispatch($user);
         $message = "Your Account has been created . Please Confirm Your Email";
@@ -62,9 +61,9 @@ class AuthController extends Controller
 
     public function emailConfirm(Request $request,$code)
     {
-        $user = User::query()->where('email_verification_code',sha1($code))->first();
+        $user = User::where('email_verification_code',$code)->first();
         if (is_null($user)){
-            return redirect()->route('login');
+            return \response(['Invalid code'],404);
         }
         $user->setAttribute('email_verified_at',now());
         $user->setAttribute('email_verification_code',null);

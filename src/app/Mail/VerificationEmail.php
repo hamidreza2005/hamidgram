@@ -20,8 +20,8 @@ class VerificationEmail extends Mailable
     public function __construct($user)
     {
         $this->user = $user;
-        $this->to =$user;
-        $this->subject = "Email Verification";
+        $this->to($user);
+        $this->subject("Email Verification");
     }
 
     /**
