@@ -19,9 +19,12 @@ Route::get('/', function (Request $request) {
     return ['ok'];
 });
 
+// Auth Routes
 Route::post('/login','AuthController@login')->name('login');
 Route::post('/register','AuthController@register')->name('register');
 Route::get('/confirmation/emailConfirmation/{code}','AuthController@emailConfirm')->name('emailConfirmation');
 Route::post('/password/reset','AuthController@resetPassword')->name('resetPassword')->middleware('throttle:1,10');
 
-
+//Route::group(['prefix'=>'posts'],function (){
+//    Route::post('/add','PostController@add');
+//});
