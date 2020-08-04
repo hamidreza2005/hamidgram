@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Jobs\SendResetPasswordEmailJob;
 use App\Jobs\SendVerificationEmailJob;
 use App\User;
+use App\UserSetting;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -50,24 +52,48 @@ class AuthController extends Controller
         if ($validation->fails()){
             return \response(['error'=>$validation->errors()],401);
         }
-        $credentials['email_verification_code'] = Str::random(50);
+//        $credentials['email_verification_code'] = Str::random(50);
         $credentials['password'] = bcrypt($credentials['password']);
         unset($credentials['password_confirmation']);
         $user = User::create($credentials);
-        SendVerificationEmailJob::dispatch($user);
+        $user->setting()->create([
+            'email_verification_code' => Str::random(50)
+        ]);
+        SendVerificationEmailJob::dispatch($user->load('setting'));
         $message = "Your Account has been created . Please Confirm Your Email";
         return \response(['message'=>$message],201);
     }
 
     public function emailConfirm(Request $request,$code)
     {
-        $user = User::where('email_verification_code',$code)->first();
+        $user = UserSetting::where('email_verification_code',$code)->first()->user->load('setting');
+//        dd($user);
         if (is_null($user)){
             return \response(['Invalid code'],404);
         }
         $user->setAttribute('email_verified_at',now());
-        $user->setAttribute('email_verification_code',null);
+        $user->setting->update(['email_verification_code'=>null]);
         $user->save();
         return response(['Your Email Has Been Confirmed'],200);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $credentials = $request->only(['email']);
+        $validation = Validator::make($credentials,[
+            'email'=>'required|min:6|email',
+        ]);
+        if ($validation->fails()){
+            return \response(['error'=>$validation->errors()],401);
+        }
+        $user = User::where('email',$credentials['email'])->first();
+        if (is_null($user)){
+            return \response(['error'=>"Invalid Credentials"],400);
+        }
+        $password = Str::random(16);
+        $user->password = bcrypt($password);
+        $user->save();
+        SendResetPasswordEmailJob::dispatch($user,$password);
+        return \response(['message'=>"your new Password has been sent to your Email"],200);
     }
 }
