@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Http\Resources\PostResource;
 use App\Jobs\handleUploadedImageJob;
 use App\Jobs\HashUploadedImage;
 use App\Post;
@@ -51,7 +52,7 @@ class PostController extends Controller
     public function remove(Request $request,$id){
         $post = Post::find($id);
         if (is_null($post)){
-            return response(['error'=>"Post not found"]);
+            return response(['error'=>"Post not found"],404);
         }
         $this->authorize('delete',[$post]);
         $imagePath = $post->url;
@@ -60,5 +61,18 @@ class PostController extends Controller
         }
         $post->delete();
         return response([],204);
+    }
+
+    public function view(Request $request,$id)
+    {
+        $post = Post::find($id);
+        if (is_null($post)){
+            return response(['error'=>'Post Not Found'],404);
+        }
+        $this->authorize('view',$post);
+        if (!Storage::exists($post->url)){
+            return response(['error'=>'Post Not Found'],404);
+        }
+        return [new PostResource($post),200];
     }
 }

@@ -19,7 +19,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        //
+        return !$post->just_for_creator;
     }
 
     /**
@@ -46,4 +46,8 @@ class PostPolicy
         return $user->id === $post->user_id;
     }
 
+    public function showLikes(User $user , Post $post)
+    {
+        return $post->show_num_of_likes_to_all;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 class PostResource extends JsonResource
 {
@@ -14,6 +15,13 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $data = [
+            'url' => asset($this->url),
+            'description' => $this->description,
+        ];
+        if (Gate::allows('showLikes',$this->resource)){
+
+        }
+        return $data;
     }
 }
