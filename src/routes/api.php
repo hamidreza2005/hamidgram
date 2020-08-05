@@ -27,5 +27,6 @@ Route::get('/confirmation/emailConfirmation/{code}','AuthController@emailConfirm
 Route::post('/password/reset','AuthController@resetPassword')->name('resetPassword')->middleware('throttle:1,10');
 
 Route::group(['prefix'=>'posts'],function (){
-    Route::post('/add','PostController@add')->name('add.post');
+    Route::post('/','PostController@add')->name('add.post');
+    Route::delete('/{id}','PostController@remove')->name('remove.post');
 });

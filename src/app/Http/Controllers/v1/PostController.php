@@ -47,4 +47,18 @@ class PostController extends Controller
         auth()->user()->posts()->create($data);
         return response(['message'=>"Your Post has been created"],201);
     }
+
+    public function remove(Request $request,$id){
+        $post = Post::find($id);
+        if (is_null($post)){
+            return response(['error'=>"Post not found"]);
+        }
+        $this->authorize('delete',[$post]);
+        $imagePath = $post->url;
+        if (Post::where('url',$imagePath)->count() <= 1){
+            Storage::delete($imagePath);
+        }
+        $post->delete();
+        return response([],204);
+    }
 }
