@@ -17,6 +17,7 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('url');
+            $table->string('hash')->nullable();
             $table->text('description');
             $table->boolean('show_num_of_likes_to_all')->default(true);
             $table->boolean('just_for_creator')->default(false);

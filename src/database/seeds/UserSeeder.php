@@ -11,10 +11,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        if (!\App\User::all()){
-            $this->createAdmin();
-            factory(\App\User::class,9)->create();
-        }
+        $this->createAdmin();
+        factory(\App\User::class,9)->create();
+
     }
 
     private function createAdmin()
