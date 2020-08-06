@@ -50,4 +50,8 @@ class PostPolicy
     {
         return $post->show_num_of_likes_to_all;
     }
+
+    public function showComments(User $user,Post $post){
+        return $post->comment_status;
+    }
 }

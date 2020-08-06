@@ -19,8 +19,11 @@ class PostResource extends JsonResource
             'url' => asset($this->url),
             'description' => $this->description,
         ];
-        if (Gate::allows('showLikes',$this->resource)){
-
+        if ($request->has('withUser')){
+            $data['user'] = new UserResource($this->user);
+        }
+        if (Gate::allows('showComments',$this->resource) && $request->has('withComments')){
+            $data['comments'] = CommentResource::collection($this->comments);
         }
         return $data;
     }
