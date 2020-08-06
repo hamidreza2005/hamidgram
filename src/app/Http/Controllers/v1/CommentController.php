@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Comment;
+use App\Http\Resources\CommentResource;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -62,5 +63,12 @@ class CommentController extends Controller
         $comment->body = $request->get('body');
         $comment->save();
         return response(['message'=>'Comment Updated'],203);
+    }
+
+    public function view($commentId)
+    {
+        $comment = Comment::find($commentId);
+        $this->authorize('view',[$comment,$comment->post]);
+        return response(new CommentResource($comment),200);
     }
 }
