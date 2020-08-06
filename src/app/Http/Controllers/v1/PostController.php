@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Comment;
+use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Jobs\handleUploadedImageJob;
 use App\Post;
@@ -96,5 +98,12 @@ class PostController extends Controller
         }
         $post->update($data);
         return response(['message'=>'Post Updated'],203);
+    }
+
+    public function getComments(Request $request,$id)
+    {
+        $post = Post::findOrFail($id);
+        $this->authorize('showComments',$post);
+        return response(CommentResource::collection($post->comments),200);
     }
 }

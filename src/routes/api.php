@@ -32,6 +32,7 @@ Route::group(['prefix'=>'posts'],function (){
     Route::delete('/{id}','PostController@remove')->name('remove.post');
     Route::get('/{id}','PostController@view')->name('show.post');
     Route::put('/{id}','PostController@update')->name('update.post');
+    Route::get('/getComments/{id}','PostController@getComments')->name('show.comments.for.posts');
 });
 
 Route::group(['prefix'=>'comments'],function (){

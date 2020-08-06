@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
                 break;
             case ($exception instanceof NotFoundHttpException):
 //                $ex = $exception->getPrevious();
-                $this->message = "Invalid Data";
+                $this->message = "Not Found";
                 break;
             case ($exception instanceof AuthenticationException):
                 $this->message = "Access Denied";
