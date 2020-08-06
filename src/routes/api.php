@@ -37,4 +37,5 @@ Route::group(['prefix'=>'posts'],function (){
 Route::group(['prefix'=>'comments'],function (){
    Route::post('/{postId}/{parentId?}',"CommentController@add")->name('add.comment');
    Route::delete('/{commentId}',"CommentController@remove")->name('remove.comment');
+   Route::put('/{commentId}',"CommentController@update")->name('update.comment');
 });

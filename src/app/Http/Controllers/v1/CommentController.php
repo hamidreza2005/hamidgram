@@ -48,4 +48,19 @@ class CommentController extends Controller
         $comment->delete();
         return response([],204);
     }
+
+    public function update(Request $request , $commentId)
+    {
+        $comment = Comment::findOrFail($commentId);
+        $this->authorize('update',[$comment,$comment->post]);
+        $validation = Validator::make($request->only('body'),[
+            'body'=>'required|string|min:3'
+        ]);
+        if ($validation->fails()){
+            return response(['error'=>$validation->errors()],400);
+        }
+        $comment->body = $request->get('body');
+        $comment->save();
+        return response(['message'=>'Comment Updated'],203);
+    }
 }

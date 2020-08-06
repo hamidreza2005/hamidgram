@@ -41,9 +41,9 @@ class CommentPolicy
      * @param  \App\Comment  $comment
      * @return mixed
      */
-    public function update(User $user,Post $post , Comment $comment)
+    public function update(User $user, Comment $comment,Post $post )
     {
-        if ($comment->update_available_until >= now() && $user->id === $comment->user_id){
+        if ($comment->update_available_until >= now() && $user->id === $comment->user_id && $post->comment_status){
             return true;
         }
         return false;
