@@ -7,11 +7,9 @@ use App\Jobs\SendVerificationEmailJob;
 use App\User;
 use App\UserSetting;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {

@@ -18,4 +18,14 @@ class Comment extends Model
     {
         return $this->hasMany(self::class,'parent_id','id');
     }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -33,3 +33,7 @@ Route::group(['prefix'=>'posts'],function (){
     Route::get('/{id}','PostController@view')->name('show.post');
     Route::put('/{id}','PostController@update')->name('update.post');
 });
+
+Route::group(['prefix'=>'comments'],function (){
+   Route::post('/{postId}/{parentId?}',"CommentController@add")->name('add.comment');
+});
