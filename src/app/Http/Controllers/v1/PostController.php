@@ -4,7 +4,6 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Resources\PostResource;
 use App\Jobs\handleUploadedImageJob;
-use App\Jobs\HashUploadedImage;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
