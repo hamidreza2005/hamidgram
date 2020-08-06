@@ -73,6 +73,6 @@ class PostController extends Controller
         if (!Storage::exists($post->url)){
             return response(['error'=>'Post Not Found'],404);
         }
-        return [new PostResource($post),200];
+        return response(new PostResource($post),200);
     }
 }

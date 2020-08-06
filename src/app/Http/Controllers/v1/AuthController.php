@@ -17,7 +17,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest:api');
+        $this->middleware('guest:api')->except('logout');
     }
 
     public function login(Request $request)
@@ -67,7 +67,6 @@ class AuthController extends Controller
     public function emailConfirm(Request $request,$code)
     {
         $user = UserSetting::where('email_verification_code',$code)->first()->user->load('setting');
-//        dd($user);
         if (is_null($user)){
             return \response(['Invalid code'],404);
         }
@@ -95,5 +94,11 @@ class AuthController extends Controller
         $user->save();
         SendResetPasswordEmailJob::dispatch($user,$password);
         return \response(['message'=>"your new Password has been sent to your Email"],200);
+    }
+
+    public function logout()
+    {
+        auth()->user()->token()->delete();
+        return \response([],204);
     }
 }

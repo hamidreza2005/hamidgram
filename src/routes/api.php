@@ -25,6 +25,7 @@ Route::post('/login','AuthController@login')->name('login');
 Route::post('/register','AuthController@register')->name('register');
 Route::get('/confirmation/emailConfirmation/{code}','AuthController@emailConfirm')->name('emailConfirmation');
 Route::post('/password/reset','AuthController@resetPassword')->name('resetPassword')->middleware('throttle:1,10');
+Route::post('/logout','AuthController@logout')->name('logout')->middleware('auth:api');
 
 Route::group(['prefix'=>'posts'],function (){
     Route::post('/','PostController@add')->name('add.post');
