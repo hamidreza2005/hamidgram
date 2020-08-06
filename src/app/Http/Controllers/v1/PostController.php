@@ -18,12 +18,13 @@ class PostController extends Controller
 
     public function add(Request $request)
     {
-        $data = $request->only(['image','description','just_for_me','show_likes_to_all']);
+        $data = $request->only(['image','description','just_for_me','show_likes_to_all','comment_status']);
         $validation = Validator::make($data,[
             'image'=>['required','image'],
             'description'=>['string'],
             'just_for_me'=>['boolean'],
             'show_likes_to_all'=>['boolean'],
+            'comment_status'=>['boolean'],
         ]);
         if ($validation->fails()){
             return response(['error'=>$validation->errors()],400);
@@ -79,11 +80,12 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $this->authorize('update',$post);
-        $data = $request->only(['description','just_for_me','show_likes_to_all']);
+        $data = $request->only(['description','just_for_me','show_likes_to_all',"comment_status"]);
         $validation = Validator::make($data,[
             'description'=>['string'],
             'just_for_me'=>['boolean'],
             'show_likes_to_all'=>['boolean'],
+            'comment_status'=>['boolean'],
         ]);
         if ($validation->fails()){
             return response(['error'=>$validation->errors()],400);
