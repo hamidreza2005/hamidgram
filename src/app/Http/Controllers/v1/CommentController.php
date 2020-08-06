@@ -37,4 +37,15 @@ class CommentController extends Controller
         $comment->save();
         return response(['message'=>"Comment Created"],201);
     }
+
+    public function remove($commentId)
+    {
+        $comment = Comment::findOrFail($commentId);
+        $this->authorize('delete',$comment);
+        foreach ($comment->replies as $reply){
+            $reply->delete();
+        }
+        $comment->delete();
+        return response([],204);
+    }
 }
