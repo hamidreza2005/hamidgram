@@ -31,4 +31,5 @@ Route::group(['prefix'=>'posts'],function (){
     Route::post('/','PostController@add')->name('add.post');
     Route::delete('/{id}','PostController@remove')->name('remove.post');
     Route::get('/{id}','PostController@view')->name('show.post');
+    Route::put('/{id}','PostController@update')->name('update.post');
 });

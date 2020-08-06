@@ -75,4 +75,21 @@ class PostController extends Controller
         }
         return response(new PostResource($post),200);
     }
+
+    public function update(Request $request,$id)
+    {
+        $post = Post::find($id);
+        $this->authorize('update',$post);
+        $data = $request->only(['description','just_for_me','show_likes_to_all']);
+        $validation = Validator::make($data,[
+            'description'=>['string'],
+            'just_for_me'=>['boolean'],
+            'show_likes_to_all'=>['boolean'],
+        ]);
+        if ($validation->fails()){
+            return response(['error'=>$validation->errors()],400);
+        }
+        $post->update($data);
+        return response(['message'=>'Post Updated'],203);
+    }
 }
