@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
 
 class CommentResource extends JsonResource
 {
@@ -14,16 +15,17 @@ class CommentResource extends JsonResource
      */
     public function toArray($request)
     {
-        $data = [
-          'body'=>$this->body,
-          'user'=>new UserResource($this->user),
-        ];
         if ($request->has('withReplies')){
             $data['replies'] = $this->replies;
         }
         if ($request->has('withPost')){
             $data['post'] = $this->post;
         }
-        return $data;
+        return [
+            'body'=>$this->resource->body,
+            'user'=>new UserResource($this->user),
+            'replies'=> $this->whenLoaded('replies',CommentResource::collection($this->replies), new MissingValue()),
+            'created_at'=>$this->created_at->toDateTimeLocalString(),
+        ];
     }
 }

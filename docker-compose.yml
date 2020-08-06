@@ -63,13 +63,6 @@ services:
     working_dir: /var/www/html
     depends_on:
       - php
-  npm:
-    image: node:13.7
-    container_name: npm
-    volumes:
-      - ./src:/var/www/html
-    working_dir: /var/www/html
-    entrypoint: ['npm']
   artisan:
     build:
       context: .

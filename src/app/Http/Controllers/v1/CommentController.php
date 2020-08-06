@@ -6,6 +6,7 @@ use App\Comment;
 use App\Http\Resources\CommentResource;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
@@ -18,7 +19,8 @@ class CommentController extends Controller
     public function add(Request $request , int $postId , int  $parentId = 0)
     {
         $post = Post::findOrFail($postId);
-        $this->authorize('create',$post);
+//        dd(Gate::allows('create',[Comment::class,$post]));
+        $this->authorize('create',[Comment::class,$post]);
         $data = $request->only('body');
         $validation = Validator::make($data,[
            'body'=>'required|string|min:3'

@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Comment;
-use App\Post;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -18,7 +17,7 @@ class CommentPolicy
      * @param  \App\Comment  $comment
      * @return mixed
      */
-    public function view(User $user, Comment $comment , Post $post)
+    public function view(User $user, Comment $comment ,$post)
     {
         return $post->comment_status;
     }
@@ -29,7 +28,7 @@ class CommentPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function create(User $user,Post $post)
+    public function create(User $user,$post)
     {
         return $post->comment_status;
     }
@@ -41,7 +40,7 @@ class CommentPolicy
      * @param  \App\Comment  $comment
      * @return mixed
      */
-    public function update(User $user, Comment $comment,Post $post )
+    public function update(User $user, Comment $comment,$post )
     {
         if ($comment->update_available_until >= now() && $user->id === $comment->user_id && $post->comment_status){
             return true;
