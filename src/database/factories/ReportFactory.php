@@ -10,7 +10,7 @@ $factory->define(Report::class, function (Faker $faker) {
     $post_ids = \App\Post::pluck('id')->toArray();
     return [
         'user_id'=>\Illuminate\Support\Arr::random($user_ids),
-        'post_id'=>\Illuminate\Support\Arr::random($post_ids),
+        'post_id'=>1,
         'reason'=>$faker->word,
     ];
 });
