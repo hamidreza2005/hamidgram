@@ -32,7 +32,7 @@ class AuthController extends Controller
         }else{
             $user = $user->where('email',$username)->firstOrFail();
         }
-        if (!Hash::check($password,$user->password) || is_null($user->getAttribute('email_verified_at'))){
+        if (!Hash::check($password,$user->password) || is_null($user->getAttribute('email_verified_at')) || is_null($user->setting->two_step_verification_code)){
             return response(['error'=>['message'=>'Invalid Username Or Password']],200);
         }
         if ($user->setting->two_step_verification_status){
@@ -116,8 +116,9 @@ class AuthController extends Controller
         if ($userSetting->getAttribute('two_step_verification_code_expire_at') < now()){
             return response(['error'=>"Your Code has been expired"],400);
         }
-        $user = $userSetting->user;
-        $token = $user->createToken('GrantClient')->accessToken;
-        return response(compact('token'),200);
+        $userSetting->two_step_verification_code = null;
+        $userSetting->two_step_verification_expire_at = null;
+        $userSetting->save();
+        return response(['message'=>'Now You Can Login'],200);
     }
 }

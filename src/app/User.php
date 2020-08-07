@@ -62,4 +62,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Report::class);
     }
+
+    public function followers()
+    {
+        return $this->belongsToMany(self::class,'follows','follower_id','following_id');
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(self::class,'follows','following_id','follower_id');
+    }
 }
