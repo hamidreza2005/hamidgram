@@ -15,16 +15,11 @@ class CommentResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($request->has('withReplies')){
-            $data['replies'] = $this->replies;
-        }
-        if ($request->has('withPost')){
-            $data['post'] = $this->post;
-        }
         return [
             'body'=>$this->resource->body,
             'user'=>new UserResource($this->user),
             'replies'=> $this->whenLoaded('replies',CommentResource::collection($this->replies), new MissingValue()),
+            'post'=>$this->whenPivotLoaded('posts',new PostResource($this->post)),
             'created_at'=>$this->created_at->toDateTimeLocalString(),
         ];
     }

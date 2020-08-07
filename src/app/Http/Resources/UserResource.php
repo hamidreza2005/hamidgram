@@ -14,11 +14,12 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $data = [
+        return [
             'username' =>$this->username,
             'avatarUrl' =>$this->avatarUrl ? asset($this->avatarUrl) : null,
-            'bio'=>$this->bio
+            'bio'=>$this->bio,
+            'posts'=>$this->whenPivotLoaded('posts',PostResource::collection($this->posts)),
+            'posts_count'=>$this->whenPivotLoaded('posts',$this->posts()->count()),
         ];
-        return $data;
     }
 }

@@ -78,7 +78,6 @@ class PostController extends Controller
         auth()->user()->views()->create([
             'post_id'=>$post->id
         ]);
-//        dd(->toResponse($request));
         return response(new PostResource($post->load('views','user','comments')),200);
     }
 

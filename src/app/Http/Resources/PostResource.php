@@ -15,10 +15,6 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($request->has('withUser')){
-            $data['user'] = new UserResource($this->user);
-//            $data['views_count'] = $this->views()->count();
-        }
         if (Gate::allows('showComments',$this->resource) && $request->has('withComments')){
             $data['comments'] = CommentResource::collection($this->comments);
         }
