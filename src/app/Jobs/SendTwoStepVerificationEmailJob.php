@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\VerificationEmail;
+use App\Mail\twoStepVerification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendVerificationEmailJob implements ShouldQueue
+class SendTwoStepVerificationEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     private $user;
@@ -23,7 +23,7 @@ class SendVerificationEmailJob implements ShouldQueue
      */
     public function __construct($user,$code)
     {
-//        dd($user);
+        //
         $this->user = $user;
         $this->code = $code;
     }
@@ -35,6 +35,6 @@ class SendVerificationEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        Mail::send(new VerificationEmail($this->user,$this->code));
+        Mail::send(new twoStepVerification($this->user,$this->code));
     }
 }

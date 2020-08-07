@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Jobs\SendResetPasswordEmailJob;
+use App\Jobs\SendTwoStepVerificationEmailJob;
 use App\Jobs\SendVerificationEmailJob;
 use App\User;
 use App\UserSetting;
@@ -34,6 +35,14 @@ class AuthController extends Controller
         if (!Hash::check($password,$user->password) || is_null($user->getAttribute('email_verified_at'))){
             return response(['error'=>['message'=>'Invalid Username Or Password']],200);
         }
+        if ($user->setting->two_step_verification_status){
+            $code = Str::random(50);
+            $user->setting()->update([
+                "two_step_verification_code" => sha1($code)]
+            );
+            SendTwoStepVerificationEmailJob::dispatch($user,$code);
+            return response(['message'=>"your Code has been sent to your Email . Please Confirm if this Account is yours"],200);
+        }
         $token = $user->createToken('GrantClient')->accessToken;
         return response(compact('token'),200);
     }
@@ -54,17 +63,18 @@ class AuthController extends Controller
         $credentials['password'] = bcrypt($credentials['password']);
         unset($credentials['password_confirmation']);
         $user = User::create($credentials);
+        $code = Str::random(50);
         $user->setting()->create([
-            'email_verification_code' => Str::random(50)
+            'email_verification_code' => sha1($code),
         ]);
-        SendVerificationEmailJob::dispatch($user->load('setting'));
+        SendVerificationEmailJob::dispatch($user->load('setting'),$code);
         $message = "Your Account has been created . Please Confirm Your Email";
         return \response(['message'=>$message],201);
     }
 
     public function emailConfirm(Request $request,$code)
     {
-        $user = UserSetting::where('email_verification_code',$code)->first()->user->load('setting');
+        $user = UserSetting::where('email_verification_code',sha1($code))->first()->user->load('setting');
         if (is_null($user)){
             return \response(['Invalid code'],404);
         }
@@ -98,5 +108,16 @@ class AuthController extends Controller
     {
         auth()->user()->token()->delete();
         return \response([],204);
+    }
+
+    public function twoStepVerification(Request $request,$code)
+    {
+        $userSetting = UserSetting::query()->where('two_step_verification_code',sha1($code))->firstOrFail();
+        if ($userSetting->getAttribute('two_step_verification_code_expire_at') < now()){
+            return response(['error'=>"Your Code has been expired"],400);
+        }
+        $user = $userSetting->user;
+        $token = $user->createToken('GrantClient')->accessToken;
+        return response(compact('token'),200);
     }
 }

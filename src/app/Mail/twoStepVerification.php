@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class VerificationEmail extends Mailable
+class twoStepVerification extends Mailable
 {
     use Queueable, SerializesModels;
     private $user;
@@ -16,14 +16,15 @@ class VerificationEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param $user
+     * @return void
      */
     public function __construct($user,$code)
     {
+        //
         $this->user = $user;
-        $this->to($user);
-        $this->subject("Email Verification");
         $this->code = $code;
+        $this->subject("Two Step Verification");
+        $this->to($user);
     }
 
     /**
@@ -33,6 +34,6 @@ class VerificationEmail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mails.verificationEmail',['user'=>$this->user,'code'=>$this->code]);
+        return $this->markdown('mails.twoStepVerification',['user'=>$this->user,'code'=>$this->code]);
     }
 }

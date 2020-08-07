@@ -2,6 +2,7 @@
 
 namespace App\Casts;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class updateAvailableCast implements CastsAttributes
@@ -17,7 +18,7 @@ class updateAvailableCast implements CastsAttributes
      */
     public function get($model, $key, $value, $attributes)
     {
-        return $value;
+        return Carbon::parse($value);
     }
 
     /**

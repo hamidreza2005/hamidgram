@@ -5,7 +5,7 @@ namespace App\Casts;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
-class CreatedAtCast implements CastsAttributes
+class twoStepVerificationExpireAt implements CastsAttributes
 {
     /**
      * Cast the given value.
@@ -32,6 +32,6 @@ class CreatedAtCast implements CastsAttributes
      */
     public function set($model, $key, $value, $attributes)
     {
-        return now();
+        return now()->addHour();
     }
 }

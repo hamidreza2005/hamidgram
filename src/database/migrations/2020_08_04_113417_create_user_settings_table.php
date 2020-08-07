@@ -19,6 +19,7 @@ class CreateUserSettingsTable extends Migration
             $table->string('email_verification_code')->nullable();
             $table->boolean('two_step_verification_status')->default(false);
             $table->string('two_step_verification_code')->nullable();
+            $table->timestamp('two_step_verification_code_expire_at')->default(null)->nullable();
             $table->timestamps();
         });
     }
