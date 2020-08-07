@@ -41,3 +41,7 @@ Route::group(['prefix'=>'comments'],function (){
    Route::put('/{commentId}',"CommentController@update")->name('update.comment');
    Route::get('/{commentId}',"CommentController@view")->name('show.comment');
 });
+
+Route::group(['prefix'=>'report'],function (){
+   Route::post('/{postId}','ReportController@index')->name('report post');
+});

@@ -24,4 +24,9 @@ class Post extends Model
     {
         return $this->hasMany(View::class);
     }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
 }
