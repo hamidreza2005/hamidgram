@@ -25,6 +25,7 @@ Route::post('/login','AuthController@login')->name('login');
 Route::post('/register','AuthController@register')->name('register');
 Route::post('/password/reset','AuthController@resetPassword')->name('resetPassword')->middleware('throttle:1,10');
 Route::post('/logout','AuthController@logout')->name('logout')->middleware('auth:api');
+Route::get('/@{username}','UserController@profile')->name('show.profile');
 Route::group(['prefix'=>'confirmation'],function (){
     Route::get('/emailConfirmation/{code}','AuthController@emailConfirm')->name('emailConfirmation');
     Route::get('/twostepverification/{code}','AuthController@twoStepVerification')->name('twoStepVerification');

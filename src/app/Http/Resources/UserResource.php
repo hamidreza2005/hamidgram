@@ -18,8 +18,10 @@ class UserResource extends JsonResource
             'username' =>$this->username,
             'avatarUrl' =>$this->avatarUrl ? asset($this->avatarUrl) : null,
             'bio'=>$this->bio,
-            'posts'=>$this->whenPivotLoaded('posts',PostResource::collection($this->posts)),
-            'posts_count'=>$this->whenPivotLoaded('posts',$this->posts()->count()),
+//            'posts'=>$this->whenPivotLoaded('posts',PostResource::collection($this->posts)),
+//            'posts_count'=>$this->whenLoaded('posts',$this->posts()->count()),
+//            'followers'=>$this->whenLoaded('followers',self::collection($this->followers)),
+//            'following'=>$this->whenLoaded('following',self::collection($this->following)),
         ];
     }
 }
