@@ -44,5 +44,6 @@ class handleReports extends Command
                 $post->delete();
             };
         }
+        return  0;
     }
 }
