@@ -32,7 +32,7 @@ Route::group(['prefix'=>'confirmation'],function (){
 });
 
 Route::group(['prefix'=>'users'],function (){
-   Route::delete('/deleteAccount',"UserController@delete")->name('delete.account');
+   Route::delete('/deleteaccount',"UserController@delete")->name('delete.account');
 });
 
 Route::group(['prefix'=>'posts'],function (){
