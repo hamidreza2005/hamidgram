@@ -32,7 +32,7 @@ class AuthController extends Controller
         }else{
             $user = $user->where('email',$username)->firstOrFail();
         }
-        if (!Hash::check($password,$user->password) || is_null($user->getAttribute('email_verified_at')) || is_null($user->setting->two_step_verification_code)){
+        if (!Hash::check($password,$user->password) || is_null($user->getAttribute('email_verified_at')) || !is_null($user->setting->two_step_verification_code)){
             return response(['error'=>['message'=>'Invalid Username Or Password']],200);
         }
         if ($user->setting->two_step_verification_status){
@@ -59,7 +59,6 @@ class AuthController extends Controller
         if ($validation->fails()){
             return \response(['error'=>$validation->errors()],401);
         }
-//        $credentials['email_verification_code'] = Str::random(50);
         $credentials['password'] = bcrypt($credentials['password']);
         unset($credentials['password_confirmation']);
         $user = User::create($credentials);
