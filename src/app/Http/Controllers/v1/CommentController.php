@@ -71,6 +71,10 @@ class CommentController extends Controller
     {
         $comment = Comment::find($commentId);
         $this->authorize('view',[$comment,$comment->post]);
-        return response(new CommentResource($comment),200);
+        $output = [
+          'comment'=> new CommentResource($comment),
+          'replies'=> CommentResource::collection($comment->replies),
+        ];
+        return response($output,200);
     }
 }

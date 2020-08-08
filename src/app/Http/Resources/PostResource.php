@@ -22,9 +22,6 @@ class PostResource extends JsonResource
             'url' => asset($this->url),
             'description' => $this->description,
             'created_at'=> $this->created_at->toDateTimeLocalString(),
-            'views_count'=> $this->whenLoaded('views',$this->views()->count()),
-            'user'=>$this->whenLoaded('user',new UserResource($this->user)),
-            'comments_count'=>$this->whenLoaded('comments',$this->comments()->count()),
         ];
     }
 }

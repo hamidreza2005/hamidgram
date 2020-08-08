@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v1;
 use App\Comment;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\UserResource;
 use App\Jobs\handleUploadedImageJob;
 use App\Post;
 use Illuminate\Http\Request;
@@ -78,7 +79,13 @@ class PostController extends Controller
         auth()->user()->views()->create([
             'post_id'=>$post->id
         ]);
-        return response(new PostResource($post->load('views','user','comments')),200);
+        $output = [
+          'post'=>new PostResource($post),
+          'user'=>new UserResource($post),
+          'views_count'=> $post->views()->count(),
+          'comments'=> CommentResource::collection($post->comments),
+        ];
+        return response($output,200);
     }
 
     public function update(Request $request,$id)
