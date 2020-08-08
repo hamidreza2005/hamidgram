@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Jobs\handleUploadedImageJob;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -83,8 +84,10 @@ class PostController extends Controller
           'post'=>new PostResource($post),
           'user'=>new UserResource($post),
           'views_count'=> $post->views()->count(),
-          'comments'=> CommentResource::collection($post->comments),
         ];
+        if (Gate::allows('showComments',$post)){
+            $output['comments'] = CommentResource::collection($post->comments);
+        }
         return response($output,200);
     }
 

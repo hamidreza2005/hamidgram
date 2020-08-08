@@ -15,12 +15,10 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        if (Gate::allows('showComments',$this->resource) && $request->has('withComments')){
-            $data['comments'] = CommentResource::collection($this->comments);
-        }
         return [
             'url' => asset($this->url),
             'description' => $this->description,
+            $this->mergeWhen(Gate::allows('showLikes',$this->resource),['likes_count' => $this->likes_count]),
             'created_at'=> $this->created_at->toDateTimeLocalString(),
         ];
     }

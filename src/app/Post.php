@@ -10,6 +10,8 @@ class Post extends Model
     protected $fillable = [
       'url','description','show_num_of_likes_to_all','just_for_creator','hash'
     ];
+    protected $withCount = ['likes'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -28,5 +30,10 @@ class Post extends Model
     public function reports()
     {
         return $this->hasMany(Report::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 }
