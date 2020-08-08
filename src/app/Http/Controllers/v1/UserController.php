@@ -6,6 +6,7 @@ use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -17,6 +18,9 @@ class UserController extends Controller
     public function profile($username)
     {
         $user = User::where('username',$username)->firstOrFail();
+        if (Gate::denies('view',$user)){
+            return response(['message'=>"this Account is Private",'user'=>new UserResource($user)],200);
+        }
         $output = [
           'user'=>new UserResource($user),
           'posts'=>PostResource::collection($user->posts),

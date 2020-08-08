@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
 
 class UserResource extends JsonResource
 {
@@ -18,6 +19,7 @@ class UserResource extends JsonResource
             'username' =>$this->username,
             'avatarUrl' =>$this->avatarUrl ? asset($this->avatarUrl) : null,
             'bio'=>$this->bio,
+            'location'=>$this->location ?? new MissingValue(),
 //            'posts'=>$this->whenPivotLoaded('posts',PostResource::collection($this->posts)),
 //            'posts_count'=>$this->whenLoaded('posts',$this->posts()->count()),
 //            'followers'=>$this->whenLoaded('followers',self::collection($this->followers)),
