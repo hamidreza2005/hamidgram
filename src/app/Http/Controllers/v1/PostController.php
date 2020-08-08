@@ -7,6 +7,7 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Jobs\handleUploadedImageJob;
+use App\Like;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -114,5 +115,28 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $this->authorize('showComments',$post);
         return response(CommentResource::collection($post->comments),200);
+    }
+
+    public function like($postId)
+    {
+        $post = Post::findOrFail($postId);
+        if (Gate::denies('canLike',$post)){
+            return response(['error'=>"you Can't Like This post"],400);
+        }
+        Like::create([
+           'post_id' =>$post->id,
+           'user_id' =>auth()->id(),
+        ]);
+        return response(['message'=>"You Liked this Post"],201);
+    }
+
+    public function retakeLike($postId)
+    {
+        $post = Post::findOrFail($postId);
+        if (Gate::allows('canLike',$post)){
+            return response(['error'=>"you Can't retake your Like"],400);
+        }
+        Like::query()->where('post_id',$post->id)->where('user_id',auth()->id())->delete();
+        return response([],204);
     }
 }

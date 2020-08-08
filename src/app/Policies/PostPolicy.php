@@ -54,4 +54,9 @@ class PostPolicy
     public function showComments(User $user,Post $post){
         return $post->comment_status;
     }
+
+    public function canLike(User $user , Post $post)
+    {
+        return is_null($user->likes()->where('post_id',$post->id)->first());
+    }
 }

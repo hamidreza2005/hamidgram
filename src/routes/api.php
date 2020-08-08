@@ -41,6 +41,8 @@ Route::group(['prefix'=>'posts'],function (){
     Route::get('/{id}','PostController@view')->name('show.post');
     Route::put('/{id}','PostController@update')->name('update.post');
     Route::get('/getcomments/{id}','PostController@getComments')->name('show.comments.for.posts');
+    Route::post('/like/{postId}','PostController@like')->name('like.post');
+    Route::post('/like/retake/{postId}','PostController@retakeLike')->name('retake.like');
 });
 
 Route::group(['prefix'=>'comments'],function (){
