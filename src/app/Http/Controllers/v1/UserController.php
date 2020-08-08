@@ -29,4 +29,9 @@ class UserController extends Controller
         ];
         return response($output,200);
     }
+
+//    public function delete()
+//    {
+//        auth()->user()
+//    }
 }

@@ -20,10 +20,6 @@ class UserResource extends JsonResource
             'avatarUrl' =>$this->avatarUrl ? asset($this->avatarUrl) : null,
             'bio'=>$this->bio,
             'location'=>$this->location ?? new MissingValue(),
-//            'posts'=>$this->whenPivotLoaded('posts',PostResource::collection($this->posts)),
-//            'posts_count'=>$this->whenLoaded('posts',$this->posts()->count()),
-//            'followers'=>$this->whenLoaded('followers',self::collection($this->followers)),
-//            'following'=>$this->whenLoaded('following',self::collection($this->following)),
         ];
     }
 }

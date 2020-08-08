@@ -31,6 +31,10 @@ Route::group(['prefix'=>'confirmation'],function (){
     Route::get('/twostepverification/{code}','AuthController@twoStepVerification')->name('twoStepVerification');
 });
 
+Route::group(['prefix'=>'users'],function (){
+   Route::delete('/deleteAccount',"UserController@delete")->name('delete.account');
+});
+
 Route::group(['prefix'=>'posts'],function (){
     Route::post('/','PostController@add')->name('add.post');
     Route::delete('/{id}','PostController@remove')->name('remove.post');
