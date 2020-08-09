@@ -35,4 +35,25 @@ class UserController extends Controller
         auth()->user()->delete();
         return response([],204);
     }
+
+    public function getUnreadNotifications()
+    {
+        $notifications = auth()->user()->unreadNotifications;
+        if (is_null($notifications)){
+            return response([],200);
+        }
+        $notifications->each(function ($notification){
+           $notification->maskAsRead();
+        });
+        return response($notifications->pluck('data')->toArray(),200);
+    }
+
+    public function getAllNotifications()
+    {
+        $notifications = auth()->user()->notifications;
+        if (!is_null($notifications)){
+            $notifications = $notifications->pluck('data')->toArray();
+        }
+        return response($notifications,200);
+    }
 }

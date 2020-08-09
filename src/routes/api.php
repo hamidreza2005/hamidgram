@@ -33,6 +33,8 @@ Route::group(['prefix'=>'confirmation'],function (){
 
 Route::group(['prefix'=>'users'],function (){
    Route::delete('/deleteaccount',"UserController@delete")->name('delete.account');
+   Route::get('/getnotifications/unread',"UserController@getUnreadNotifications")->name('get.unread.notifications');
+   Route::get('/getnotifications/all',"UserController@getAllNotifications")->name('get.all.notifications');
 });
 
 Route::group(['prefix'=>'posts'],function (){

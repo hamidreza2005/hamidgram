@@ -16,6 +16,7 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'=>$this->id,
             'url' => asset($this->url),
             'description' => $this->description,
             $this->mergeWhen(Gate::allows('showLikes',$this->resource),['likes_count' => $this->likes_count]),

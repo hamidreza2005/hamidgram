@@ -8,6 +8,7 @@ use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Jobs\handleUploadedImageJob;
 use App\Like;
+use App\Notifications\LikeNotification;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -127,6 +128,7 @@ class PostController extends Controller
            'post_id' =>$post->id,
            'user_id' =>auth()->id(),
         ]);
+        $post->user->notify(new LikeNotification($post,auth()->user()));
         return response(['message'=>"You Liked this Post"],201);
     }
 
