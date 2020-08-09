@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Comment;
 use App\Http\Resources\CommentResource;
+use App\Notifications\CommentNotification;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -18,7 +19,7 @@ class CommentController extends Controller
 
     public function add(Request $request , int $postId , int  $parentId = 0)
     {
-        $post = Post::findOrFail($postId);
+        $post = Post::findOrFail($postId)->load('user');
 //        dd(Gate::allows('create',[Comment::class,$post]));
         $this->authorize('create',[Comment::class,$post]);
         $data = $request->only('body');
@@ -38,6 +39,9 @@ class CommentController extends Controller
         $comment->parent_id = $parentId;
         $comment->body = $request->get('body');
         $comment->save();
+        if (auth()->id() !== $post->user->id){
+            $post->user->notify(new CommentNotification(auth()->user(),$post,$comment));
+        }
         return response(['message'=>"Comment Created"],201);
     }
 
