@@ -7,6 +7,8 @@ use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -55,5 +57,22 @@ class UserController extends Controller
             $notifications = $notifications->pluck('data')->toArray();
         }
         return response($notifications,200);
+    }
+
+    public function changeProfilePicture(Request $request)
+    {
+        $data = $request->only(['profilePhoto']);
+        $validation = Validator::make($data,[
+            'profilePhoto'=>['required','image']
+        ]);
+        if ($validation->fails()){
+            return response(['error'=>$validation->errors()],400);
+        }
+        $filepath = '/'.now()->year;
+        $fullPath = '/'.Storage::putFile($filepath,$request->profilePhoto);
+        auth()->user()->update([
+            'avatarUrl'=>$fullPath
+        ]);
+        return response(['message'=>"your Profile Picture has been updated"],203);
     }
 }
