@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\ForceUserToAcceptJson;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -43,7 +42,7 @@ class Kernel extends HttpKernel
         'api' => [
 //            'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            ForceUserToAcceptJson::class,
+            \App\Http\Middleware\ForceUserToAcceptJson::class,
         ],
     ];
 

@@ -14,12 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function (Request $request) {
-//    \Illuminate\Support\Facades\Cache::put('user',\App\User::find(1));
-    dd(auth()->user());
-    return ['ok'];
-})->middleware('auth:api');
-
 // Auth Routes
 Route::post('/login','AuthController@login')->name('login');
 Route::post('/register','AuthController@register')->name('register');

@@ -20,7 +20,6 @@ class CommentController extends Controller
     public function add(Request $request , int $postId , int  $parentId = 0)
     {
         $post = Post::findOrFail($postId)->load('user');
-//        dd(Gate::allows('create',[Comment::class,$post]));
         $this->authorize('create',[Comment::class,$post]);
         $data = $request->only('body');
         $validation = Validator::make($data,[
