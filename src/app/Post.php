@@ -10,7 +10,7 @@ class Post extends Model
     protected $fillable = [
       'url','description','show_num_of_likes_to_all','just_for_creator','hash'
     ];
-    protected $withCount = ['likes'];
+    protected $withCount = ['likes','views'];
 
     public function user()
     {

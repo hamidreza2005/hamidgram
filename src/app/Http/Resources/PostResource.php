@@ -20,6 +20,7 @@ class PostResource extends JsonResource
             'url' => asset($this->url),
             'description' => $this->description,
             $this->mergeWhen(Gate::allows('showLikes',$this->resource),['likes_count' => $this->likes_count]),
+            'views_count' => $this->views_count,
             'created_at'=> $this->created_at->toDateTimeLocalString(),
         ];
     }
