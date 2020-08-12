@@ -17,4 +17,8 @@ class View extends Model
       'viewed_at'=>CreatedAtCast::class
     ];
 
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

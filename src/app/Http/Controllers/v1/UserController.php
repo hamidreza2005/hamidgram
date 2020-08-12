@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v1;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\User;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -74,5 +75,11 @@ class UserController extends Controller
             'avatarUrl'=>$fullPath
         ]);
         return response(['message'=>"your Profile Picture has been updated"],203);
+    }
+
+    public function history()
+    {
+        $history = PostResource::collection(auth()->user()->views()->getRelation('post')->get());
+        return response($history,200);
     }
 }

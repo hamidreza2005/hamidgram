@@ -30,6 +30,7 @@ Route::group(['prefix'=>'users'],function (){
    Route::get('/getnotifications/unread',"UserController@getUnreadNotifications")->name('get.unread.notifications');
    Route::get('/getnotifications/all',"UserController@getAllNotifications")->name('get.all.notifications');
    Route::post('/change_profile_picture',"UserController@changeProfilePicture")->name('change.profile.picture')->middleware('throttle:2,10');
+   Route::get('/history',"UserController@history")->name('user.history');
 });
 
 Route::group(['prefix'=>'posts'],function (){
