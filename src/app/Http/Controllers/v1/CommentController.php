@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Http\Controllers\Controller;
 use App\Comment;
 use App\Http\Resources\CommentResource;
 use App\Notifications\CommentNotification;

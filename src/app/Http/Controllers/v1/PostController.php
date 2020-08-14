@@ -7,6 +7,7 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Jobs\handleUploadedImageJob;
+use App\Http\Controllers\Controller;
 use App\Like;
 use App\Notifications\LikeNotification;
 use App\Post;

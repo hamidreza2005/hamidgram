@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\User;
 use App\View;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;

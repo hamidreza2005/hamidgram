@@ -6,6 +6,7 @@ use App\Jobs\ReportPostJob;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
