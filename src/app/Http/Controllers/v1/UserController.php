@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use function GuzzleHttp\Psr7\parse_header;
 
 class UserController extends Controller
 {
@@ -82,5 +83,39 @@ class UserController extends Controller
     {
         $history = PostResource::collection(auth()->user()->views()->getRelation('post')->get());
         return response($history,200);
+    }
+
+    public function editProfile(Request $request)
+    {
+        $this->authorize('update',auth()->user());
+        $data = $request->only(['username','bio','is_private','location']);
+        $validator = Validator::make($data,[
+            'username'=>['string','unique:users,username,'.auth()->id()],
+            'bio'=>['string'],
+            'is_private'=>['boolean'],
+            'avatarUrl'=>['image'],
+            'location'=>['string'],
+        ]);
+        if ($validator->fails()){
+            return response(['errors'=>$validator->errors()],400);
+        }
+        auth()->user()->update($data);
+        return response(['message'=>"User Updated"],203);
+    }
+
+    public function editSettings(Request $request)
+    {
+        $this->authorize('update',auth()->user());
+        $data = $request->only(['notify_when_get_like','notify_when_get_comment','two_step_verification_status']);
+        $validator = Validator::make($data,[
+            'notify_when_get_like'=>['boolean'],
+            'notify_when_get_comment'=>['boolean'],
+            'two_step_verification_status'=>['boolean'],
+        ]);
+        if ($validator->fails()){
+            return response(['errors'=>$validator->errors()],400);
+        }
+        auth()->user()->setting()->update($data);
+        return response(['message'=>'User\'s Setting Updated'],203);
     }
 }
