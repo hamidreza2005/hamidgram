@@ -26,17 +26,6 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function create(User $user)
-    {
-        //
-    }
-
-    /**
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
