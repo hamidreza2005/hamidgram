@@ -72,7 +72,7 @@ class PostController extends Controller
 
     public function view(Request $request,$id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
         if (is_null($post)){
             return response(['error'=>'Post Not Found'],404);
         }
@@ -85,7 +85,7 @@ class PostController extends Controller
         ]);
         $output = [
           'post'=>new PostResource($post),
-          'user'=>new UserResource($post),
+          'user'=>new UserResource($post->user),
           'views_count'=> $post->views()->count(),
         ];
         if (Gate::allows('showComments',$post)){

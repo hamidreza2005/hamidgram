@@ -73,7 +73,7 @@ class CommentController extends Controller
 
     public function view($commentId)
     {
-        $comment = Comment::find($commentId);
+        $comment = Comment::findOrFail($commentId);
         $this->authorize('view',[$comment,$comment->post]);
         $output = [
           'comment'=> new CommentResource($comment),
