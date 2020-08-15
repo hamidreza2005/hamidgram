@@ -40,11 +40,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('follow',function(User $user,$model){
-            $data = $user->following()->where('id',$model);
-            if ($data->get()->isEmpty()){
-                return false;
-            }
-            return $data->count() >= 1 ? false :true;
+            return $user->following()->where('id',$model->id)->count() >= 1 ? false :true;
+        });
+        
+        Gate::define('unFollow',function(User $user,$model){
+            return $user->following()->where('id',$model->id)->count() === 1 ? true : false;
         });
 
         $this->registerPolicies();

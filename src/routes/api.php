@@ -35,6 +35,7 @@ Route::group(['prefix'=>'users'],function (){
    Route::put('/edit/profile',"UserController@editProfile")->name('user.edit.profile');
    Route::put('/edit/settings',"UserController@editSettings")->name('user.edit.settings');
    Route::post('/follow/{userId}',"UserController@follow")->name('follow.user');
+   Route::delete('/unfollow/{userId}',"UserController@unfollow")->name('unfollow.user');
 });
 
 Route::group(['prefix'=>'posts'],function (){
