@@ -123,14 +123,14 @@ class UserController extends Controller
 
     public function follow(Request $request , $userId)
     {
-        $user = User::query()->findOrFail($userId);
+        $user = User::findOrFail($userId);
         $this->authorize('follow',$user);
         auth()->user()->following()->attach($user->id);
         return response(['message'=>"You Followed Requested User"],200);
     }
 
     public function unfollow(Request $request , $userId){
-        $user = User::query()->findOrFail($userId);
+        $user = User::findOrFail($userId);
         $this->authorize('unFollow',$user);
         auth()->user()->following()->detach($user->id);
         return response(['message'=>"You Unfollowed Requested User"],200);

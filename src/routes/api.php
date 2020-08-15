@@ -58,3 +58,7 @@ Route::group(['prefix'=>'comments'],function (){
 Route::group(['prefix'=>'report'],function (){
    Route::post('/{postId}','ReportController@index')->name('report post');
 });
+
+Route::group(['prefix'=>'admin'],function (){
+   Route::delete('/deleteuser/{userId}','AdminController@deleteUser')->name('delete.user.by.admin');
+});
