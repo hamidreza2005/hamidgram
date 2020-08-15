@@ -118,4 +118,11 @@ class UserController extends Controller
         auth()->user()->setting()->update($data);
         return response(['message'=>'User\'s Setting Updated'],203);
     }
+
+    public function follow(Request $request , $userId)
+    {
+        $this->authorize('follow',$userId);
+        auth()->user()->following()->attach($userId);
+        return response(['message'=>"You Followed Requested User"],200);
+    }
 }

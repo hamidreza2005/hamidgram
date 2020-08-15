@@ -18,7 +18,6 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-//        dd($model->is_private);
         if ($user->id === $model->id || !$model->is_private){
             return true;
         }

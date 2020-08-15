@@ -38,6 +38,15 @@ class AuthServiceProvider extends ServiceProvider
             }
             return false;
         });
+
+        Gate::define('follow',function(User $user,$model){
+            $data = $user->following()->where('id',$model);
+            if ($data->get()->isEmpty()){
+                return false;
+            }
+            return $data->count() >= 1 ? false :true;
+        });
+
         $this->registerPolicies();
 
 //        Passport::routes();

@@ -34,6 +34,7 @@ Route::group(['prefix'=>'users'],function (){
    Route::get('/history',"UserController@history")->name('user.history');
    Route::put('/edit/profile',"UserController@editProfile")->name('user.edit.profile');
    Route::put('/edit/settings',"UserController@editSettings")->name('user.edit.settings');
+   Route::post('/follow/{userId}',"UserController@follow")->name('follow.user');
 });
 
 Route::group(['prefix'=>'posts'],function (){
