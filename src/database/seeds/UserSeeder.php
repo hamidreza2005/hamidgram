@@ -12,7 +12,9 @@ class UserSeeder extends Seeder
     public function run()
     {
         $this->createAdmin();
-        factory(\App\User::class,9)->create();
+        factory(\App\User::class,9)->create()->each(function ($user){
+            $user->setting()->create();
+        });
 
     }
 
@@ -30,5 +32,6 @@ class UserSeeder extends Seeder
         $user = new \App\User($data);
         $user->type = "admin";
         $user->save();
+        $user->setting()->create();
     }
 }

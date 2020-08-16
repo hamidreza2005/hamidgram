@@ -20,6 +20,9 @@ class AdminController extends Controller
         $user->delete();
         return response([],204);
     }
-    
-    
+
+    public function deletepost($postId)
+    {
+
+    }
 }

@@ -62,4 +62,5 @@ Route::group(['prefix'=>'report'],function (){
 
 Route::group(['prefix'=>'admin'],function (){
    Route::delete('/deleteuser/{userId}','AdminController@deleteUser')->name('delete.user.by.admin');
+   Route::delete('/deletepost/{postId}','AdminController@deletepost')->name('delete.post.by.admin');
 });
