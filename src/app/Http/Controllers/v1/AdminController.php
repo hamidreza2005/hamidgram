@@ -7,12 +7,15 @@ use App\Post;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware('adminAndManager');
+        $this->middleware('admin')->only(['raiseUser']);
     }
 
     public function deleteUser(Request $request , $userId)
@@ -37,5 +40,16 @@ class AdminController extends Controller
         }
         $post->delete();
         return response([],204);
+    }
+
+    public function raiseUser(Request $request,$userId){
+        $data = $request->only(['type']);
+        $validator = Validator::make($data,[
+            'type'=>['required',Rule::in(['user','manager','admin'])]
+        ]);
+        $user = User::findOrFail($userId);
+        $user->type = $data['type'];
+        $user->save();
+        return response(["message"=>"User type Changed"],203);
     }
 }
