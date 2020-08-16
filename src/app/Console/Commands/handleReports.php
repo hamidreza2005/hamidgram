@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Notifications\NotifyAdminToDeleteReportedPost;
 use App\Post;
+use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
 
@@ -39,16 +41,17 @@ class handleReports extends Command
      */
     public function handle()
     {
-        $posts = Post::all();
+        $posts = Post::withCount('reports')->get();
         foreach ($posts as $post){
-            if ($post->reports()->count() >= 500){
-//                if (config('image.delete_reported_post_automatically')){
+            if ($post->reports_count >= 500){
+                if (config('image.delete_reported_post_automatically')){
                     $post->delete();
-//                }else{
-//                Notification::send();
-//                }
+                }else{
+                    Notification::send(User::where('type','admin')->get(),new NotifyAdminToDeleteReportedPost($post));
+                }
             };
         }
-        return  0;
+        $this->info("Reports handled");
+        return 0;
     }
 }
