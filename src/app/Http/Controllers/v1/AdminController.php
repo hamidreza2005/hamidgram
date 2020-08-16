@@ -50,7 +50,7 @@ class AdminController extends Controller
         return response(["message"=>"User type Changed"],203);
     }
 
-    public function editUser(Request $request,$userId){
+    public function editProfile(Request $request,$userId){
         $user = User::query()->findOrFail($userId);
         $this->checkUserIfNotAdmin($user);
         $data =$request->only(['avatarUrl','bio','username','location']);
@@ -61,7 +61,20 @@ class AdminController extends Controller
             'location'=>['string'],
         ]);
         $user->update($data);
-        return response('User Updated',203);
+        return response(["message"=>'User Updated'],203);
+    }
+
+    public function editUserSetting(Request $request,$userId){
+        $user = User::query()->findOrFail($userId);
+        $this->checkUserIfNotAdmin($user);
+        $data = $request->only(['notify_when_get_like','notify_when_get_comment','two_step_verification_status']);
+        validateData($data,[
+            'notify_when_get_like'=>['boolean'],
+            'notify_when_get_comment'=>['boolean'],
+            'two_step_verification_status'=>['boolean'],
+        ]);
+        $user->setting()->update($data);
+        return response(['message'=>'User\'s Setting Updated'],203);
     }
 
     protected function checkUserIfNotAdmin(User $user){
