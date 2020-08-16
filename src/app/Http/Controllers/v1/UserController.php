@@ -135,4 +135,13 @@ class UserController extends Controller
         auth()->user()->following()->detach($user->id);
         return response(['message'=>"You Unfollowed Requested User"],200);
     }
+
+    public function search(Request $request)
+    {
+        if (!$request->has('q')){
+            return response([],200);
+        }
+        $users = UserResource::collection(User::query()->where('username',"LIKE","%{$request->get('q')}%")->get());
+        return response($users,200);
+    }
 }

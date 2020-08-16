@@ -20,6 +20,6 @@ class AdminController extends Controller
         $user->delete();
         return response([],204);
     }
-
+    
     
 }

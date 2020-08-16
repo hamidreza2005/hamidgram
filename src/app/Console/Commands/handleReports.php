@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Post;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Notification;
 
 class handleReports extends Command
 {
@@ -41,7 +42,11 @@ class handleReports extends Command
         $posts = Post::all();
         foreach ($posts as $post){
             if ($post->reports()->count() >= 500){
-                $post->delete();
+//                if (config('image.delete_reported_post_automatically')){
+                    $post->delete();
+//                }else{
+//                Notification::send();
+//                }
             };
         }
         return  0;
