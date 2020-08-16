@@ -67,12 +67,9 @@ class UserController extends Controller
     public function changeProfilePicture(Request $request)
     {
         $data = $request->only(['profilePhoto']);
-        $validation = Validator::make($data,[
+        validateData($data,[
             'profilePhoto'=>['required','image']
         ]);
-        if ($validation->fails()){
-            return response(['error'=>$validation->errors()],400);
-        }
         $filepath = '/'.now()->year;
         $fullPath = '/'.Storage::putFile($filepath,$request->profilePhoto);
         auth()->user()->update([
@@ -91,16 +88,12 @@ class UserController extends Controller
     {
         $this->authorize('update',auth()->user());
         $data = $request->only(['username','bio','is_private','location']);
-        $validator = Validator::make($data,[
+        validateData($data,[
             'username'=>['string','unique:users,username,'.auth()->id()],
             'bio'=>['string'],
             'is_private'=>['boolean'],
-            'avatarUrl'=>['image'],
             'location'=>['string'],
         ]);
-        if ($validator->fails()){
-            return response(['errors'=>$validator->errors()],400);
-        }
         auth()->user()->update($data);
         return response(['message'=>"User Updated"],203);
     }
@@ -109,14 +102,11 @@ class UserController extends Controller
     {
         $this->authorize('update',auth()->user());
         $data = $request->only(['notify_when_get_like','notify_when_get_comment','two_step_verification_status']);
-        $validator = Validator::make($data,[
+        validateData($data,[
             'notify_when_get_like'=>['boolean'],
             'notify_when_get_comment'=>['boolean'],
             'two_step_verification_status'=>['boolean'],
         ]);
-        if ($validator->fails()){
-            return response(['errors'=>$validator->errors()],400);
-        }
         auth()->user()->setting()->update($data);
         return response(['message'=>'User\'s Setting Updated'],203);
     }

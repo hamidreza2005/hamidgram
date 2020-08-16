@@ -51,15 +51,12 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $credentials = $request->only(['username','email','password','password_confirmation']);
-        $validation = Validator::make($credentials,[
+        validateData($credentials,[
            'username'=>'required|min:5|unique:users',
            'email'=>'required|min:6|email|unique:users',
            'password'=>['required','min:8'] ,
            'password_confirmation'=>'required|same:password' ,
         ]);
-        if ($validation->fails()){
-            return \response(['error'=>$validation->errors()],401);
-        }
         $credentials['password'] = bcrypt($credentials['password']);
         unset($credentials['password_confirmation']);
         $user = User::create($credentials);
@@ -87,12 +84,9 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         $credentials = $request->only(['email']);
-        $validation = Validator::make($credentials,[
+        validateData($credentials,[
             'email'=>'required|min:6|email',
         ]);
-        if ($validation->fails()){
-            return \response(['error'=>$validation->errors()],401);
-        }
         $user = User::where('email',$credentials['email'])->first();
         if (is_null($user)){
             return \response(['error'=>"Invalid Credentials"],400);

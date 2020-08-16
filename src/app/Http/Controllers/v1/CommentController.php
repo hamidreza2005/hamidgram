@@ -23,12 +23,9 @@ class CommentController extends Controller
         $post = Post::findOrFail($postId)->load('user');
         $this->authorize('create',[Comment::class,$post]);
         $data = $request->only('body');
-        $validation = Validator::make($data,[
+        validateData($data,[
            'body'=>'required|string|min:3'
         ]);
-        if ($validation->fails()){
-            return response(['error'=>$validation->errors()],400);
-        }
         if ($parentId > 0){
             $parent = Comment::findOrFail($parentId);
         }
@@ -60,12 +57,9 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($commentId);
         $this->authorize('update',[$comment,$comment->post]);
-        $validation = Validator::make($request->only('body'),[
+        validateData($request->only('body'),[
             'body'=>'required|string|min:3'
         ]);
-        if ($validation->fails()){
-            return response(['error'=>$validation->errors()],400);
-        }
         $comment->body = $request->get('body');
         $comment->save();
         return response(['message'=>'Comment Updated'],203);

@@ -19,12 +19,9 @@ class ReportController extends Controller
     public function index(Request $request , $postId)
     {
         $post = Post::findOrFail($postId);
-        $validation = Validator::make($request->only(['reason']),[
+        validateData($request->only(['reason']),[
             'reason'=>"required|string"
         ]);
-        if ($validation->fails()){
-            return response(["error"=>$validation->errors()],400);
-        }
         if (!Cache::has('report_'.auth()->id().$post->id)){
             ReportPostJob::dispatch($post,auth()->user(),$request->reason);
         }
