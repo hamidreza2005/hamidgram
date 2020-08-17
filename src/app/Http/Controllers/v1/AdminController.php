@@ -6,17 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Post;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use phpDocumentor\Reflection\Types\Void_;
 
 class AdminController extends Controller
 {
     public function __construct()
     {
         $this->middleware('adminAndManager');
-        $this->middleware('admin')->only(['raiseUser']);
+        $this->middleware('admin')->only(['raiseUser','SetConfig']);
     }
 
     public function deleteUser(Request $request , $userId)
@@ -75,6 +74,19 @@ class AdminController extends Controller
         ]);
         $user->setting()->update($data);
         return response(['message'=>'User\'s Setting Updated'],203);
+    }
+
+    public function SetConfig(Request $request)
+    {
+        $data = $request->only("delete_reported_post_automatically");
+        validateData($data,[
+            "delete_reported_post_automatically"=>['boolean']
+        ]);
+        dd($data);
+        if (!empty($data)){
+            Config::set('image.delete_reported_post_automatically',$data['delete_reported_post_automatically']);
+        }
+        return response(['message'=>"Configs Updated"],200);
     }
 
     protected function checkUserIfNotAdmin(User $user){
