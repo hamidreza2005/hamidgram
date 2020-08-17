@@ -82,7 +82,6 @@ class AdminController extends Controller
         validateData($data,[
             "delete_reported_post_automatically"=>['boolean']
         ]);
-        dd($data);
         if (!empty($data)){
             Config::set('image.delete_reported_post_automatically',$data['delete_reported_post_automatically']);
         }
