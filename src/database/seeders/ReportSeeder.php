@@ -1,8 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\Report;
 use Illuminate\Database\Seeder;
 
-class LikeSeeder extends Seeder
+class ReportSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +14,6 @@ class LikeSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Like::class,200)->create();
+        Report::factory(500)->create();
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    use HasFactory;
     protected $table = 'posts';
     protected $fillable = [
       'url','description','show_num_of_likes_to_all','just_for_creator','hash'

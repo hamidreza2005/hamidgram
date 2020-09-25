@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -12,7 +14,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $this->createAdmin();
-        factory(\App\User::class,9)->create()->each(function ($user){
+        User::factory(9)->create()->each(function ($user){
             $user->setting()->create();
         });
 
